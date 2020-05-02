@@ -11,9 +11,54 @@ const Pagewrapper = styled.div`
   flex-direction: column;
 `;
 
-const Customer = () => (
+const Table = styled.table`
+  width: 100%;
+`;
+
+const Tr = styled.tr`
+  width: 80%;
+  height: 70px;
+`;
+
+const Th = styled.th``;
+
+const Td = styled.td``;
+
+const Link = styled.a``;
+
+const Customer = ({ content }) => (
   <Pagewrapper>
-    home
+    <Table>
+      <thead>
+        <Tr>
+          <Th style={{ width: 100 }}>週次</Th>
+          <Th style={{ width: 70 }}>日期</Th>
+          <Th style={{ width: 200 }}>單元主題</Th>
+          <Th style={{ width: 70 }}>課程內容</Th>
+          <Th style={{ width: 70 }}>上課影片</Th>
+        </Tr>
+      </thead>
+      <tbody>
+        {
+          content.map(({
+            date,
+            chapter,
+            pdfTitle,
+            pdfLink,
+            videoTitle,
+            videoLink,
+          }, idx) => (
+            <Tr key={date}>
+              <Td>{`第${idx}週`}</Td>
+              <Td>{date}</Td>
+              <Td>{chapter}</Td>
+              <Td><Link href={pdfLink}>{pdfTitle}</Link></Td>
+              <Td><Link href={videoLink}>{videoTitle}</Link></Td>
+            </Tr>
+          ))
+        }
+      </tbody>
+    </Table>
   </Pagewrapper>
 );
 

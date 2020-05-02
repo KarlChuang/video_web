@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import { BrowserRouter, Route } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-import Topbar from './Topbar';
 import AdminPage from '../containers/AdminPage';
+import AdminVideoPage from '../containers/AdminVideoPage';
 import CustomerPage from '../containers/CustomerPage';
 import VideoPage from '../containers/VideoPage';
 
@@ -33,22 +33,14 @@ class Router extends Component {
   }
 
   render() {
-    const { account } = this.props;
     return (
       <BrowserRouter>
         <Rootwrapper>
-          <Topbar account={account} />
           <Route
             exact
             path="/"
             component={() => (
               <CustomerPage />
-            )}
-          />
-          <Route
-            path="/admin"
-            component={() => (
-              <AdminPage />
             )}
           />
           <Route
@@ -62,9 +54,20 @@ class Router extends Component {
     );
   }
 }
-
+// <Route
+//   exact
+//   path="/admin"
+//   component={() => (
+//     <AdminPage />
+//   )}
+// />
+// <Route
+//   path="/admin/upload_video"
+//   component={() => (
+//     <AdminVideoPage />
+//   )}
+// />
 Router.propTypes = {
-  account: PropTypes.string.isRequired,
 };
 
 export default Router;

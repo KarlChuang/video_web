@@ -32,22 +32,21 @@ const Tool = styled(Link)`
   }
 `;
 
-const Topbar = ({ location, account }) => (
+const Topbar = ({ location }) => (
   <Topbarwrapper>
-    <Tool to="/" label="" path={location.pathname.split('/')[1]}>home</Tool>
-    <Tool to="/admin/" label="admin" path={location.pathname.split('/')[1]}>admin</Tool>
+    <Tool to="/admin/upload_video/" label="/upload_video/" path={location.pathname.split('/admin')[1]}>upload video</Tool>
+    <Tool to="/admin/" label="/" path={location.pathname.split('/admin')[1]}>content</Tool>
   </Topbarwrapper>
 );
 
-const TopbarRouter = withRouter(({ location, account }) => (
-  <Topbar location={location} account={account} />
+const TopbarRouter = withRouter(({ location }) => (
+  <Topbar location={location} />
 ));
 
 Topbar.propTypes = {
   location: PropTypes.shape({
     pathname: PropTypes.string.isRequired,
   }).isRequired,
-  account: PropTypes.string.isRequired,
 };
 
 export default TopbarRouter;
