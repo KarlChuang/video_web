@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import fetch from 'isomorphic-fetch';
+// import PropTypes from 'prop-types';
+import axios from 'axios';
 
 import Customer from '../components/Customer';
 
@@ -13,8 +13,8 @@ class CustomerPage extends Component {
   }
 
   async componentDidMount() {
-    const res = await fetch('/api/content');
-    const resJson = await res.json();
+    const res = await axios.get('/api/content');
+    const resJson = res.data;
     this.setState({
       content: resJson,
     });
@@ -30,10 +30,10 @@ class CustomerPage extends Component {
   }
 }
 
-CustomerPage.propTypes = {
-};
+// CustomerPage.propTypes = {
+// };
 
-CustomerPage.defaultProps = {
-};
+// CustomerPage.defaultProps = {
+// };
 
 export default CustomerPage;

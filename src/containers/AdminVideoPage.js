@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
+import axios from 'axios';
 
 import AdminVideo from '../components/AdminVideo';
 
@@ -7,56 +8,68 @@ class AdminVideoPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      progress: 0,
       videoFile: undefined,
-      videoName: '',
+      videoName: 'Choose a file...',
+      videoData: {
+        filename: '',
+        path: '',
+        size: 0,
+      },
     };
     this.handleVideoChange = this.handleVideoChange.bind(this);
-    this.handleVideoNameChange = this.handleVideoNameChange.bind(this);
     this.handleVideoSubmit = this.handleVideoSubmit.bind(this);
   }
 
   handleVideoChange(e) {
-    this.setState({
-      videoFile: e.target.files[0],
-    });
+    if (e.target.files[0] !== undefined) {
+      this.setState({
+        progress: 0,
+        videoName: e.target.files[0].name,
+        videoFile: e.target.files[0],
+      });
+    }
   }
 
-  handleVideoNameChange(value) {
-    this.setState({
-      videoName: value,
-    });
-  }
-
-  handleVideoSubmit() {
-    const { videoName, videoFile } = this.state;
+  async handleVideoSubmit() {
+    const { videoFile } = this.state;
     const form = new FormData();
     form.append('video', videoFile);
-    form.append('videoName', videoName);
-    console.log(videoName);
-    console.log(videoFile);
-    fetch('/api/upload/video', {
-      method: 'POST',
-      body: form,
+    const res = await axios.post('/api/upload/video', form, {
+      onUploadProgress: (ProgressEvent) => {
+        this.setState({
+          progress: Math.round((ProgressEvent.loaded / ProgressEvent.total) * 100),
+        });
+      },
+    });
+    const { filename, path, size } = res.data;
+    this.setState({
+      videoData: {
+        filename,
+        path,
+        size,
+      },
     });
   }
 
   render() {
-    const { videoName } = this.state;
+    const { videoName, progress, videoData } = this.state;
     return (
       <AdminVideo
+        progress={progress}
         videoName={videoName}
+        videoData={videoData}
         handleVideoChange={this.handleVideoChange}
-        handleVideoNameChange={this.handleVideoNameChange}
         handleVideoSubmit={this.handleVideoSubmit}
       />
     );
   }
 }
 
-AdminVideoPage.propTypes = {
-};
+// AdminVideoPage.propTypes = {
+// };
 
-AdminVideoPage.defaultProps = {
-};
+// AdminVideoPage.defaultProps = {
+// };
 
 export default AdminVideoPage;

@@ -109,6 +109,12 @@ const VideoRouter = withRouter(({
 
 Video.propTypes = {
   pathname: PropTypes.string.isRequired,
+  pass: PropTypes.string.isRequired,
+  password: PropTypes.string.isRequired,
+  handlePasswordChange: PropTypes.func.isRequired,
+  handlePasswordSubmit: PropTypes.func.isRequired,
+  setVideoNode: PropTypes.func.isRequired,
+  handleTimeout: PropTypes.func.isRequired,
 };
 
 export default VideoRouter;

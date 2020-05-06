@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 
 import Admin from '../components/Admin';
 
@@ -17,10 +17,10 @@ class AdminPage extends Component {
   }
 }
 
-AdminPage.propTypes = {
-};
+// AdminPage.propTypes = {
+// };
 
-AdminPage.defaultProps = {
-};
+// AdminPage.defaultProps = {
+// };
 
 export default AdminPage;

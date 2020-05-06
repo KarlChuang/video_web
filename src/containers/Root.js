@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import { CookiesProvider } from 'react-cookie';
 
 import Router from '../components/Router';
 
@@ -18,18 +19,16 @@ class Root extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      account: 'LOGIN',
     };
   }
 
   render() {
-    const { account } = this.state;
     return (
-      <Rootwrapper>
-        <Router
-          account={account}
-        />
-      </Rootwrapper>
+      <CookiesProvider>
+        <Rootwrapper>
+          <Router />
+        </Rootwrapper>
+      </CookiesProvider>
     );
   }
 }

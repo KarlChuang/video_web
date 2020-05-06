@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { BrowserRouter, Route } from 'react-router-dom';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 
 import AdminPage from '../containers/AdminPage';
 import AdminVideoPage from '../containers/AdminVideoPage';
@@ -49,25 +49,26 @@ class Router extends Component {
               <VideoPage />
             )}
           />
+          <Route
+            exact
+            path="/admin"
+            component={() => (
+              <AdminPage />
+            )}
+          />
+          <Route
+            path="/admin/upload_video"
+            component={() => (
+              <AdminVideoPage />
+            )}
+          />
         </Rootwrapper>
       </BrowserRouter>
     );
   }
 }
-// <Route
-//   exact
-//   path="/admin"
-//   component={() => (
-//     <AdminPage />
-//   )}
-// />
-// <Route
-//   path="/admin/upload_video"
-//   component={() => (
-//     <AdminVideoPage />
-//   )}
-// />
-Router.propTypes = {
-};
+
+// Router.propTypes = {
+// };
 
 export default Router;

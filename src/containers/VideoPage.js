@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import fetch from 'isomorphic-fetch';
+import axios from 'axios';
+import { withCookies, Cookies } from 'react-cookie';
 
 import Video from '../components/Video';
 
 class VideoPage extends Component {
   constructor(props) {
     super(props);
+    const { cookies } = props;
     this.state = {
       password: '',
-      pass: 'error',
+      pass: cookies.get('pass') || 'error',
     };
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.handlePasswordSubmit = this.handlePasswordSubmit.bind(this);
@@ -29,17 +31,14 @@ class VideoPage extends Component {
 
   async handlePasswordSubmit() {
     const { password } = this.state;
-    const res = await fetch('/api/password', {
-      method: 'POST',
-      body: JSON.stringify({ password }),
-      headers: new Headers({
-        'Content-Type': 'application/json',
-      }),
-    });
-    const { pass } = await res.json();
+    const res = await axios.post('/api/password', { password });
+    const { pass } = res.data;
     this.setState({
       pass,
     });
+    const { cookies } = this.props;
+    cookies.set('pass', pass, { path: '/video', maxAge: 2 * 60 * 60 });
+
     if (this.videoNode !== undefined) {
       this.videoNode.load();
     }
@@ -68,9 +67,10 @@ class VideoPage extends Component {
 }
 
 VideoPage.propTypes = {
+  cookies: PropTypes.instanceOf(Cookies).isRequired,
 };
 
 VideoPage.defaultProps = {
 };
 
-export default VideoPage;
+export default withCookies(VideoPage);

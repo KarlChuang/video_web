@@ -63,6 +63,14 @@ const Customer = ({ content }) => (
 );
 
 Customer.propTypes = {
+  content: PropTypes.arrayOf(PropTypes.shape({
+    date: PropTypes.string.isRequired,
+    chapter: PropTypes.string.isRequired,
+    pdfTitle: PropTypes.string.isRequired,
+    pdfLink: PropTypes.string.isRequired,
+    videoTitle: PropTypes.string.isRequired,
+    videoLink: PropTypes.string.isRequired,
+  })).isRequired,
 };
 
 export default Customer;

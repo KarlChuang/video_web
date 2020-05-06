@@ -2,7 +2,8 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const bodyParser = require('body-parser');
-const formidable = require('formidable');
+const multer = require('multer');
+const cors = require('cors');
 
 const password = require('../config/password.json');
 
@@ -10,17 +11,24 @@ const port = process.env.PORT;
 
 const app = express();
 
-let videoKey = JSON.stringify(Math.round(Math.random() * 1000000000000000));
-
-setInterval(() => {
-  videoKey = JSON.stringify(Math.round(Math.random() * 1000000000000000));
-}, 60 * 60 * 1000);
+const videoKeys = {};
 
 app.use(bodyParser.urlencoded({
   extended: true,
 }));
-
 app.use(bodyParser.json());
+app.use(cors());
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.join(__dirname, '..', 'data'));
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}-${file.originalname}`);
+  },
+});
+
+const upload = multer({ storage }).single('video');
 
 const router = ['/', '/admin', '/video/:videoId', '/admin/upload_video'];
 for (let i = 0; i < router.length; i += 1) {
@@ -36,14 +44,17 @@ app.get('/api/content', async (req, res) => {
 });
 
 app.post('/api/password', async (req, res) => {
+  const newKey = JSON.stringify(Math.round(Math.random() * 1000000000000000));
+  videoKeys[newKey] = true;
+  setTimeout(() => { delete videoKeys[newKey]; }, 2 * 60 * 60 * 1000);
   res.json({
-    pass: (req.body.password === password.videoPassword) ? videoKey : 'error',
+    pass: (req.body.password === password.videoPassword) ? newKey : 'error',
   });
 });
 
 app.get('/api/video/:file/:pass', async (req, res) => {
-  if (req.params.pass === videoKey) {
-    const filePath = path.join(__dirname, '..', 'data', req.params.file);
+  const filePath = path.join(__dirname, '..', 'data', req.params.file);
+  if (videoKeys[req.params.pass] && fs.existsSync(filePath)) {
     const stat = await fs.statSync(filePath);
     const fileSize = stat.size;
     const { range } = req.headers;
@@ -77,27 +88,14 @@ app.get('/api/video/:file/:pass', async (req, res) => {
 });
 
 app.post('/api/upload/video', (req, res) => {
-
-  // console.log(req.body);
-
-  const form = new formidable.IncomingForm();
-  const dir = path.join(__dirname, '..', 'data');
-
-  form.uploadDir = dir;
-  form.keepExtensions = true;
-  form.maxFieldsSize = 10 * 1024 * 1024;
-  form.maxFields = 1000;
-  form.multiples = false;
-
-  form.parse(req, () => {});
-
-  form.on('file', (field, file) => {
-    const fileName = Date.now().toString();
-    const newPath = path.join(file.path, '..', fileName);
-    fs.rename(file.path, newPath, (err) => {
-      if (err) throw err;
-    });
-    res.status(200).send('success');
+  upload(req, res, (err) => {
+    if (err instanceof multer.MulterError) {
+      return res.status(500).json(err);
+    }
+    if (err) {
+      return res.status(500).json(err);
+    }
+    return res.status(200).send(req.file);
   });
 });
 
