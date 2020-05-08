@@ -22,6 +22,7 @@ class CustomerPage extends Component {
 
   render() {
     const { content } = this.state;
+    console.log(content);
     return (
       <Customer
         content={content}

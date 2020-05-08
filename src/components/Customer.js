@@ -43,17 +43,31 @@ const Customer = ({ content }) => (
           content.map(({
             date,
             chapter,
-            pdfTitle,
-            pdfLink,
-            videoTitle,
-            videoLink,
+            pdf,
+            video,
           }, idx) => (
             <Tr key={date}>
-              <Td>{`第${idx}週`}</Td>
+              <Td>{`第${idx + 1}週`}</Td>
               <Td>{date}</Td>
               <Td>{chapter}</Td>
-              <Td><Link href={pdfLink}>{pdfTitle}</Link></Td>
-              <Td><Link href={videoLink}>{videoTitle}</Link></Td>
+              <Td>
+                {
+                  pdf.map(({ pdfTitle, pdfLink, index }) => (
+                    <div key={index}>
+                      <Link href={pdfLink}>{pdfTitle}</Link>
+                    </div>
+                  ))
+                }
+              </Td>
+              <Td>
+                {
+                  video.map(({ videoTitle, videoLink, index }) => (
+                    <div key={index}>
+                      <Link href={videoLink}>{videoTitle}</Link>
+                    </div>
+                  ))
+                }
+              </Td>
             </Tr>
           ))
         }
@@ -66,10 +80,16 @@ Customer.propTypes = {
   content: PropTypes.arrayOf(PropTypes.shape({
     date: PropTypes.string.isRequired,
     chapter: PropTypes.string.isRequired,
-    pdfTitle: PropTypes.string.isRequired,
-    pdfLink: PropTypes.string.isRequired,
-    videoTitle: PropTypes.string.isRequired,
-    videoLink: PropTypes.string.isRequired,
+    pdf: PropTypes.arrayOf(PropTypes.shape({
+      pdfTitle: PropTypes.string.isRequired,
+      pdfLink: PropTypes.string.isRequired,
+      index: PropTypes.number.isRequired,
+    })).isRequired,
+    video: PropTypes.arrayOf(PropTypes.shape({
+      videoTitle: PropTypes.string.isRequired,
+      videoLink: PropTypes.string.isRequired,
+      index: PropTypes.number.isRequired,
+    })).isRequired,
   })).isRequired,
 };
 

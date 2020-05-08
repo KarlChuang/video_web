@@ -1,0 +1,7 @@
+{
+  "ignore": [
+    "data/videos/*",
+    "data/pdfs/*",
+    "data/*"
+  ]
+}
