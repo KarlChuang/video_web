@@ -28,7 +28,7 @@ const PasswordDiv = styled.div`
 const PasswordBox = styled.div`
   display: flex;
   flex-direction: row;
-  width: 300px;
+  width: 400px;
 `;
 
 const InputTxt = styled.div`
@@ -73,7 +73,7 @@ const Video = ({
             handleTimeout();
           }
         }}
-        ref={node => setVideoNode(node)}
+        ref={(node) => setVideoNode(node)}
         id="my-video"
         className="video-js"
         controls

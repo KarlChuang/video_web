@@ -85,6 +85,41 @@ const FileDetail = styled(FlexColumn)`
   color: #41a3b8;
 `;
 
+const PasswordDiv = styled.div`
+  background-color: #272727;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  flex-direction: row;
+  align-items: center;
+  display: flex;
+  justify-content: space-around;
+  z-index: 100;
+  display: ${({ pass }) => ((pass === 'error') ? '' : 'none')};
+`;
+
+const PasswordBox = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 400px;
+`;
+
+const InputTxt = styled.div`
+  color: white;
+  margin-right: 20px;
+`;
+
+const InputBox = styled.input`
+  margin-right: 20px;
+  flex-grow: 1;
+  font-size: 15px;
+`;
+
+const Button = styled.button`
+  border-radius: 5px;
+  border: 0;
+`;
+
 const AdminVideo = ({
   progress,
   videoName,
@@ -95,8 +130,19 @@ const AdminVideo = ({
   },
   handleVideoChange,
   handleVideoSubmit,
+  pass,
+  password,
+  handlePasswordSubmit,
+  handlePasswordChange,
 }) => (
   <Pagewrapper>
+    <PasswordDiv pass={pass}>
+      <PasswordBox>
+        <InputTxt>密碼</InputTxt>
+        <InputBox value={password} onChange={(e) => handlePasswordChange(e.target.value)} />
+        <Button onClick={handlePasswordSubmit}>提交</Button>
+      </PasswordBox>
+    </PasswordDiv>
     <Topbar />
     <PageDiv>
       <VideoInputDiv>
